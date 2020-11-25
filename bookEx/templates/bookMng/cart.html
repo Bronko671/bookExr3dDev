@@ -38,9 +38,11 @@
 					<div style="flex:1">
 						<p class="quantity">{{item.quantity}}</p>
 						<div class="quantity">
-							<img width="15" data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'arrow-up.png' %}">
+							{% comment %} <img width="15" data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'arrow-up.png' %}"> {% endcomment %}
+							<a href="/addtocart?id={{item.book.id}}&arrowup=True"><img width="15" data-product="{{item.product.id}}" data-action="add" class="chg-quantity update-cart" src="{% static  'arrow-up.png' %}"></a>
 					
-							<img width="15" data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'arrow-down.png' %}">
+							{% comment %} <img width="15" data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'arrow-down.png' %}"> {% endcomment %}
+							<a href="/addtocart?id={{item.book.id}}&arrowdown=True"><img width="15" data-product="{{item.product.id}}" data-action="remove" class="chg-quantity update-cart" src="{% static  'arrow-down.png' %}"></a>
 						</div>
 					</div>
 					<div style="flex:1"><p>${{item.get_total|floatformat:2}}</p></div>

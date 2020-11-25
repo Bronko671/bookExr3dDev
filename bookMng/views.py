@@ -51,6 +51,47 @@ def cart(request):
     )
 
 @login_required(login_url=reverse_lazy('login'))
+def addtocart(request):
+
+    user = request.user
+
+    bookid = request.GET.get('id', '')
+
+    # create order / find incompete order for current user
+    order, created = Order.objects.get_or_create(user=user, complete=False)
+
+    # get all the iterms for that order
+    items = order.orderitem_set.all()
+
+    changes = items.filter(pk = bookid)
+
+    tochange = -1
+
+    for item in items:
+        if item.book.id == int(bookid):
+            tochange = item
+
+    if tochange != -1:
+        
+        if 'fromcart' in request.GET:
+            tochange.quantity += 1
+            tochange.save()
+        
+        if 'arrowup' in request.GET:
+            tochange.quantity += 1
+            tochange.save()
+            return HttpResponseRedirect('/cart')
+
+        if 'arrowdown' in request.GET:
+            tochange.quantity -= 1
+            tochange.save()
+            return HttpResponseRedirect('/cart')
+
+
+    return HttpResponseRedirect('/displaybooks')
+
+
+@login_required(login_url=reverse_lazy('login'))
 def checkout(request):
     user = request.user
 
