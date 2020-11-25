@@ -149,12 +149,14 @@ def searchbar(request):
          search = request.GET.get('search')
          book = Book.objects.get(name=search)
          picture = str(book.picture)[6:]
+         reviews = book.review_set.all()
          return render(request,
                        'bookMng/book_detail.html',
                        {
                            'item_list': MainMenu.objects.all(),
                            'book': book,
-                           'picture': picture
+                           'picture': picture,
+                           'reviews': reviews
                        })
 
 

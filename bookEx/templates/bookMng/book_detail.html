@@ -39,7 +39,6 @@
 
     <div id="reviews">
         <h3> Reviews</h3>
-        {% comment %} <a href="{{book.id}}/postreview">Post Review</a> {% endcomment %}
         <a href="/postreview/{{book.id}}">Post Review</a>
         <br>
         <br>
@@ -54,23 +53,4 @@
     </div>
 
 </div>
-
-{% comment %} <h1 align="center"> {{ book.name }} Page</h1>
-<table align="center" border="2" width="500">
-       <tr>
-           <td>
-                   {{book.name}}
-           </td>
-           <td>
-               {{ book.publishdate }}
-           </td>
-           <td>
-               {{ book.username }}
-           </td>
-           <td>
-                <img src="{% static book.pic_path %}">
-               {{ book.pic_path }}
-           </td>
-       </tr>
-</table> {% endcomment %}
 {% endblock content %}
