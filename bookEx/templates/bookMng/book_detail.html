@@ -6,17 +6,52 @@
 {% endblock title%}
 
 
-{% block sidenav %}
+{% block navlinks %}
   {% for item in item_list %}
    <li>
-       <a href="{{ item.link }}"> {{ item.item }} </a>
+       <a class="nav-link" href="{{ item.link }}">{{ item.item}} <span class="sr-only">(current)</span></a>
    </li>
    {% endfor %}
-{% endblock sidenav %}
+{% endblock navlinks %}
+
 
 
 {% block content %}
 <h1 align="center"> {{ book.name }} Page</h1>
+
+
+    <div id="boot_details">
+        <img src="{{ picture }}" alt="book image" width="300" height="300" >
+        <h5>{{ book.name }}</h5>
+        <h5>{{ book.publishdate }}</h5>
+        <h5>{{ book.username }}</h5>
+        <form action="cart/{{ book.id}}" method="post">{% csrf_token %}
+            <input type="submit" value="Add to cart">
+        </form>
+    </div>
+
+
+    <br>
+    <br>
+
+    <div id="reviews">
+        <h3> Reviews</h3>
+        {% comment %} <a href="{{book.id}}/postreview">Post Review</a> {% endcomment %}
+        <a href="{{book.id}}/postreview">Post Review</a>
+        <br>
+        <br>
+        {% for review in reviews %}
+        <div class="review">
+        <h5>{{ review.name }}</h5>
+        <p>{{ review.body }}</p>
+
+        </div>
+        <hr>
+        {% endfor %}
+    </div>
+
+
+{% comment %} <h1 align="center"> {{ book.name }} Page</h1>
 <table align="center" border="2" width="500">
        <tr>
            <td>
@@ -33,5 +68,5 @@
                {{ book.pic_path }}
            </td>
        </tr>
-</table>
+</table> {% endcomment %}
 {% endblock content %}

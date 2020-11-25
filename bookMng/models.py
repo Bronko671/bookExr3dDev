@@ -22,4 +22,58 @@ class Book(models.Model):
     username = models.ForeignKey(User, blank=True, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
+        return str(self.name)
+
+
+class Order(models.Model):
+    # user can have many orders -> many to one relation
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    date_ordered = models.DateField(auto_now_add=True)
+    complete = models.BooleanField(default=False, null=True, blank=False)
+
+
+    def __str__(self):
         return str(self.id)
+
+    
+    @property
+    def get_cart_total(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.get_total for item in orderitems])
+        return total
+    
+
+    @property
+    def get_cart_items(self):
+        orderitems = self.orderitem_set.all()
+        total = sum([item.quantity for item in orderitems])
+        return total
+
+
+class OrderItem(models.Model):
+    # cart can have many order items 
+    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
+    order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
+    quantity = models.IntegerField(default=0, null=True, blank=True)
+    date_added = models.DateTimeField(auto_now_add=True)
+
+    @property
+    def get_total(self):
+        total = self.book.price * self.quantity
+        return total
+
+
+    
+class Review(models.Model):
+    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    name = models.CharField(max_length=80)
+    email = models.CharField(max_length=80)
+    body = models.TextField()
+    posted_date = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ['posted_date']
+
+    
+    def __str__(self):
+        return 'Review {} by {}'.format(self.body, self.name)

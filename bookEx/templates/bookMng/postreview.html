@@ -2,9 +2,8 @@
 {% load static %}
 
 {% block title %}
-    Post Book
+    Post Review
 {% endblock title%}
-
 
 {% block navlinks %}
   {% for item in item_list %}
@@ -15,12 +14,23 @@
 {% endblock navlinks %}
 
 {% block content %}
-<h1> Post Book </h1>
+
 {% if submitted %}
+<a  class="btn btn-outline-dark" href="{% url 'displaybooks' %}">&#x2190; Continue Shopping</a>
+    <h1> Reviews for {{book.name}}</h1>
     <p align="center">
-        Post Successfully!
+        {% for review in reviews %}
+        <div class="review">
+        <p>{{ review.name }}</p>
+        <p>{{ review.email }}</p>
+        <p>{{ review.body }}</p>
+
+        </div>
+        <hr>
+        {% endfor %}
     </p>
 {% else %}
+<h1> Post Review  for {{book.name}}</h1>
     <form action="" enctype="multipart/form-data" method="post" novalidate>
         <table>
             {{ form.as_table }}
