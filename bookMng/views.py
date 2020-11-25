@@ -39,6 +39,9 @@ def cart(request):
     # it will get all the orderitems that have order as the parent 
     items = order.orderitem_set.all()
 
+    for item in items:
+        item.book.picture = str(item.book.picture)[6:]
+
     return render(request, 'bookMng/cart.html', 
     {
         'item_list': MainMenu.objects.all(),
@@ -49,8 +52,20 @@ def cart(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def checkout(request):
+    user = request.user
+
+    # create object or query existing object
+    order, created = Order.objects.get_or_create(user=user, complete=False)
+    # it will get all the orderitems that have order as the parent 
+    items = order.orderitem_set.all()
+
+    for item in items:
+        item.book.picture = str(item.book.picture)[6:]
+
     return render(request, 'bookMng/checkout.html',
     {
+        'items': items,
+        'order': order
 
     }
     )
