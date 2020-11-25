@@ -40,7 +40,7 @@
     <div id="reviews">
         <h3> Reviews</h3>
         {% comment %} <a href="{{book.id}}/postreview">Post Review</a> {% endcomment %}
-        <a href="{{book.id}}/postreview">Post Review</a>
+        <a href="/postreview/{{book.id}}">Post Review</a>
         <br>
         <br>
         {% for review in reviews %}
