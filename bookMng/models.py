@@ -35,7 +35,7 @@ class Order(models.Model):
     def __str__(self):
         return str(self.id)
 
-    
+    # get total price of all orderitems in cart
     @property
     def get_cart_total(self):
         orderitems = self.orderitem_set.all()
@@ -43,6 +43,7 @@ class Order(models.Model):
         return total
     
 
+    # get total count of items in cart
     @property
     def get_cart_items(self):
         orderitems = self.orderitem_set.all()

@@ -126,7 +126,8 @@ def postreview(request, book_id):
             review = form.save(commit=False)
             review.book = book
             review.save()
-            return HttpResponseRedirect('/displaybooks/book_detail/{}/postreview?submitted=True'.format(book_id))
+            return HttpResponseRedirect('/displaybooks/book_detail/{}'.format(book_id))
+
     else:
         form = ReviewForm()
         if 'submitted' in request.GET:
