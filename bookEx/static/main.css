@@ -68,3 +68,8 @@
 .content-center {
     text-align: center;
 }
+
+.searchbar {
+    text-align: end;
+    margin-bottom: 20px;
+}

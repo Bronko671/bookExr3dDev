@@ -143,6 +143,22 @@ def postreview(request, book_id):
             })
 
 
+
+def searchbar(request):
+     if request.method == 'GET':
+         search = request.GET.get('search')
+         book = Book.objects.get(name=search)
+         picture = str(book.picture)[6:]
+         return render(request,
+                       'bookMng/book_detail.html',
+                       {
+                           'item_list': MainMenu.objects.all(),
+                           'book': book,
+                           'picture': picture
+                       })
+
+
+
 class Register(CreateView):
     template_name = 'registration/register.html'
     form_class = UserCreationForm
