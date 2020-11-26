@@ -1,8 +1,17 @@
 {% extends 'base.html' %}
 {% load static %}
+
+{% block navlinks %}
+  {% for item in item_list %}
+   <li>
+       <a class="nav-link" href="{{ item.link }}">{{ item.item}} <span class="sr-only">(current)</span></a>
+   </li>
+   {% endfor %}
+{% endblock navlinks %}
+
 {% block content %}
      <div class="row">
-		<div class="col-lg-6">
+		{% comment %} <div class="col-lg-6">
 			<div class="box-element" id="form-wrapper">
 				<form id="form">
 					<div id="user-info">
@@ -47,9 +56,9 @@
 				<div id="paypal-button-container"></div>
 			</div>
 			
-		</div>
+		</div> {% endcomment %}
 
-		<div class="col-lg-6">
+		<div class="col-lg-12">
 			<div class="box-element">
 				<a  class="btn btn-outline-dark" href="{% url 'cart' %}">&#x2190; Back to Cart</a>
 				<hr>
@@ -63,8 +72,11 @@
 					<div style="flex:1"><p>x{{item.quantity}}</p></div>
 				</div>
 				{% endfor %}
+                <div style="text-align: end;" class="checkout-sum">
 				<h5>Items:   {{order.get_cart_items}}</h5>
 				<h5>Total:   ${{order.get_cart_total|floatformat:2}}</h5>
+                <a class="btn btn-outline-success" href="/placeorder">Place Order</a>
+                </div>
 			</div>
 		</div>
 	</div>

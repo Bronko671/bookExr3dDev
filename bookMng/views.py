@@ -117,11 +117,33 @@ def checkout(request):
 
     return render(request, 'bookMng/checkout.html',
     {
+        'item_list': MainMenu.objects.all(),
         'items': items,
         'order': order
 
     }
     )
+
+
+@login_required(login_url=reverse_lazy('login'))
+def placeorder(request):
+
+    user = request.user;
+
+    order, created = Order.objects.get_or_create(user=user, complete=False)
+    items = order.orderitem_set.all()
+
+    if items.count() > 0:
+        order.complete = True
+        order.save()
+    
+
+    return render(request, 'bookMng/order_placed.html', 
+    {
+        'item_list': MainMenu.objects.all(),
+    }
+    )
+
 
 @login_required(login_url=reverse_lazy('login'))
 def displaybooks(request):
