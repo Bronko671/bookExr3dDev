@@ -27,13 +27,14 @@ class Book(models.Model):
 
 class Order(models.Model):
     # user can have many orders -> many to one relation
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, blank=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, blank=True)
     date_ordered = models.DateField(auto_now_add=True)
     complete = models.BooleanField(default=False, null=True, blank=False)
 
 
     def __str__(self):
         return str(self.id)
+
 
     # get total price of all orderitems in cart
     @property
@@ -53,10 +54,17 @@ class Order(models.Model):
 
 class OrderItem(models.Model):
     # cart can have many order items 
-    book = models.ForeignKey(Book, on_delete=models.SET_NULL, null=True)
+    book = models.ForeignKey(Book, on_delete=models.CASCADE, null=True)
     order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
     quantity = models.IntegerField(default=0, null=True, blank=True)
     date_added = models.DateTimeField(auto_now_add=True)
+
+
+    @classmethod
+    def create_item(cls, book, order, quantity):
+        bookitem = cls(quantity = quantity, book=book, order=order)
+        bookitem.save()
+        
 
     @property
     def get_total(self):
@@ -66,7 +74,7 @@ class OrderItem(models.Model):
 
 
 class ShippingAddress(models.Model):
-	user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
+	user = models.ForeignKey(User, on_delete=models.CASCADE, null=True)
 	order = models.ForeignKey(Order, on_delete=models.SET_NULL, null=True)
 	address = models.CharField(max_length=200, null=False)
 	city = models.CharField(max_length=200, null=False)

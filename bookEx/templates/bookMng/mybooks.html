@@ -33,9 +33,10 @@
 				<hr>
 
 				{% comment %} <button data-product="{{product.id}}" data-action="add" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</button> {% endcomment %}
-                <a href="/addtocart?id={{product.id}}&fromcart=True" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</a>
+                {% comment %} <a href="/addtocart?id={{product.id}}&fromcart=True" class="btn btn-outline-secondary add-btn update-cart">Add to Cart</a> {% endcomment %}
 				
 				<a class="btn btn-outline-success" href="/book_detail/{{ product.id }}">View</a>
+                <a class="btn btn-outline-danger"href="book_delete/{{ product.id }}">Delete Book</a>
 				<h4 style="display: inline-block; float: right"><strong>${{product.price}}</strong></h4>
 
 			</div>

@@ -1,9 +1,8 @@
 {% extends "base.html" %}
 {% load static %}
-{% url 'postbook' as postbook %}
 
 {% block title %}
-    User Registration Success!
+     Book Delete
 {% endblock title%}
 
 
@@ -15,10 +14,10 @@
    {% endfor %}
 {% endblock navlinks %}
 
-{% block content %}
-<h1> Registration Successful</h1>
 
-<p>
-    To login, <a href="{% url 'login' %}?next=/"> Click Here</a>
-</p>
+
+{% block content %}
+
+<h1 align="center"> Book Deleted Successfully!</h1>
+
 {% endblock content %}

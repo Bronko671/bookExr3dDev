@@ -53,27 +53,32 @@ def cart(request):
 @login_required(login_url=reverse_lazy('login'))
 def addtocart(request):
 
+
     user = request.user
 
     bookid = request.GET.get('id', '')
+    book = Book.objects.get(id=bookid)
 
     # create order / find incompete order for current user
     order, created = Order.objects.get_or_create(user=user, complete=False)
 
+    # create order item / find existing order item, modify item quantity
+    OrderItem.objects.get_or_create(book=book, order=order)
+
     # get all the iterms for that order
     items = order.orderitem_set.all()
 
-    changes = items.filter(pk = bookid)
-
     tochange = -1
 
-    for item in items:
+
+    for item in order.orderitem_set.all():
         if item.book.id == int(bookid):
             tochange = item
 
     if tochange != -1:
         
         if 'fromcart' in request.GET:
+            print('im getting called fromcart')
             tochange.quantity += 1
             tochange.save()
         
@@ -115,13 +120,38 @@ def checkout(request):
 def displaybooks(request):
     books = Book.objects.all()
     for b in books:
-        b.pic_path = b.picture.url[14:]
+        # b.pic_path = b.picture.url[14:]
         b.picture = str(b.picture)[6:]
     return render(request,
             'bookMng/displaybooks.html',
             {
                 'item_list': MainMenu.objects.all(),
                 'books': books
+            })
+
+
+@login_required(login_url=reverse_lazy('login'))
+def mybooks(request):
+    books = Book.objects.filter(username = request.user)
+    for b in books:
+        # b.pic_path = b.picture.url[14:]
+        b.picture = str(b.picture)[6:]
+    return render(request,
+            'bookMng/mybooks.html',
+            {
+                'item_list': MainMenu.objects.all(),
+                'books': books
+            })
+
+
+@login_required(login_url=reverse_lazy('login'))
+def book_delete(request, book_id):
+    book = Book.objects.filter(id=book_id)
+    book.delete()
+    return render(request,
+            'bookMng/book_delete.html',
+            {
+                'item_list': MainMenu.objects.all(),
             })
 
 @login_required(login_url=reverse_lazy('login'))
