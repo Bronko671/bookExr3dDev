@@ -71,7 +71,7 @@ def addtocart(request):
     tochange = -1
 
 
-    for item in order.orderitem_set.all():
+    for item in items:
         if item.book.id == int(bookid):
             tochange = item
 
@@ -89,7 +89,14 @@ def addtocart(request):
 
         if 'arrowdown' in request.GET:
             tochange.quantity -= 1
-            tochange.save()
+            # remove cart item if item quantity is 0
+            if tochange.quantity == 0:
+                for item in items:
+                    if item.quantity == 0:
+                        item.delete()
+                
+            else:
+                tochange.save()
             return HttpResponseRedirect('/cart')
 
 
