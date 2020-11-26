@@ -39,6 +39,7 @@ def cart(request):
     # it will get all the orderitems that have order as the parent 
     items = order.orderitem_set.all()
 
+
     for item in items:
         item.book.picture = str(item.book.picture)[6:]
 
@@ -136,6 +137,8 @@ def placeorder(request):
     if items.count() > 0:
         order.complete = True
         order.save()
+    elif items.count() == 0:
+        return HttpResponseRedirect('/displaybooks')
     
 
     return render(request, 'bookMng/order_placed.html', 
@@ -143,6 +146,36 @@ def placeorder(request):
         'item_list': MainMenu.objects.all(),
     }
     )
+
+
+@login_required(login_url=reverse_lazy('login'))
+def purchasehistory(request):
+
+    user = request.user
+    orders = Order.objects.filter(complete=True, user=user)
+
+
+    items = []
+
+    for order in orders:
+        orderitems = order.orderitem_set.all()
+        for item in orderitems:
+            item.book.picture = str(item.book.picture)[6:]
+
+        items.append(orderitems)
+
+    print(orders)
+    print(items)
+
+    return render(request, 'bookMng/purchase_history.html',
+    {
+        'item_list': MainMenu.objects.all(),
+        'items': items,
+        'order': orders,
+        'ordercount': orders.count()
+    }
+    )
+
 
 
 @login_required(login_url=reverse_lazy('login'))
