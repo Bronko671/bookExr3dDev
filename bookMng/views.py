@@ -180,7 +180,7 @@ def purchasehistory(request):
 
 @login_required(login_url=reverse_lazy('login'))
 def displaybooks(request):
-    books = Book.objects.all()
+    books = Book.objects.filter(taken_down=False)
     for b in books:
         # b.pic_path = b.picture.url[14:]
         b.picture = str(b.picture)[6:]
@@ -207,14 +207,21 @@ def mybooks(request):
 
 
 @login_required(login_url=reverse_lazy('login'))
-def book_delete(request, book_id):
-    book = Book.objects.filter(id=book_id)
-    book.delete()
+def book_takedown(request, book_id):
+    book = Book.objects.get(id=book_id)
+    # book.delete()
+    if book.taken_down == False:
+        book.taken_down = True
+    else:
+        book.taken_down = False
+    book.save()
     return render(request,
-            'bookMng/book_delete.html',
+            'bookMng/book_takedown.html',
             {
                 'item_list': MainMenu.objects.all(),
+                'taken_down': book.taken_down
             })
+
 
 @login_required(login_url=reverse_lazy('login'))
 def postbook(request):
