@@ -302,7 +302,12 @@ def postreview(request, book_id):
 def searchbar(request):
      if request.method == 'GET':
          search = request.GET.get('search')
-         book = Book.objects.get(name=search)
+         try:
+            book = Book.objects.get(name=search)
+         except:
+            return HttpResponseRedirect('/displaybooks')
+         
+         
          if book.taken_down == True:
              return HttpResponseRedirect('/displaybooks')
          picture = str(book.picture)[6:]
