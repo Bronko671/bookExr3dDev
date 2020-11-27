@@ -303,6 +303,8 @@ def searchbar(request):
      if request.method == 'GET':
          search = request.GET.get('search')
          book = Book.objects.get(name=search)
+         if book.taken_down == True:
+             return HttpResponseRedirect('/displaybooks')
          picture = str(book.picture)[6:]
          reviews = book.review_set.all()
          return render(request,
