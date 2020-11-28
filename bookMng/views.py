@@ -323,33 +323,32 @@ def searchbar(request):
                        })
 
 
-def contactform(request):
-    return render(request, 'contactform.html', {})
-    # name = ''
-    # email = ''
-    # comment = ''
-    #
-    # form = ContactForm(request.POST or None)
-    # if form.is_valid():
-    #     name = form.cleaned_data.get("name")
-    #     email = form.cleaned_data.get("email")
-    #     comment = form.cleaned_data.get("comment")
-    #
-    #     if request.user.is_authenticated():
-    #         subject = str(request.user) + "'s Comment"
-    #     else:
-    #         subject = "A Visitor's Comment"
-    #
-    #     comment = name + " with the email, " + email + ", sent the following message:\n\n" + comment;
-    #     send_mail(subject, comment, 'bookexproject@gmail.com', [email])
-    #
-    #     context = {'form': form}
-    #
-    #     return render(request, '/contactform.html', context)
-    #
-    # else:
-    #     context= {'form': form}
-    #     return render(request, '/contactform.html', context)
+def contactview(request):
+    name = ''
+    email = ''
+    comment = ''
+
+    form = ContactForm(request.POST or None)
+    if form.is_valid():
+        name = form.cleaned_data.get("name")
+        email = form.cleaned_data.get("email")
+        comment = form.cleaned_data.get("comment")
+
+        if request.user.is_authenticated():
+            subject = str(request.user) + "'s Comment"
+        else:
+            subject = "A Visitor's Comment"
+
+        comment = name + " with the email, " + email + ", sent the following message:\n\n" + comment;
+        send_mail(subject, comment, 'bookexproject@gmail.com', [email])
+
+        context = {'form': form}
+
+        return render(request, 'contact/contact.html', context)
+
+    else:
+        context = {'form': form}
+        return render(request, 'contact/contact.html', context)
 
 
 class Register(CreateView):
