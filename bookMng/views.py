@@ -12,8 +12,9 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-
-
+from django.shortcuts import render
+from .forms import ContactForm
+from django.core.mail import send_mail
 
 
 # Create your views here.
@@ -321,6 +322,34 @@ def searchbar(request):
                            'reviews': reviews
                        })
 
+
+def contactform(request):
+    return render(request, 'contactform.html', {})
+    # name = ''
+    # email = ''
+    # comment = ''
+    #
+    # form = ContactForm(request.POST or None)
+    # if form.is_valid():
+    #     name = form.cleaned_data.get("name")
+    #     email = form.cleaned_data.get("email")
+    #     comment = form.cleaned_data.get("comment")
+    #
+    #     if request.user.is_authenticated():
+    #         subject = str(request.user) + "'s Comment"
+    #     else:
+    #         subject = "A Visitor's Comment"
+    #
+    #     comment = name + " with the email, " + email + ", sent the following message:\n\n" + comment;
+    #     send_mail(subject, comment, 'bookexproject@gmail.com', [email])
+    #
+    #     context = {'form': form}
+    #
+    #     return render(request, '/contactform.html', context)
+    #
+    # else:
+    #     context= {'form': form}
+    #     return render(request, '/contactform.html', context)
 
 
 class Register(CreateView):
