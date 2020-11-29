@@ -1,6 +1,5 @@
 from django.shortcuts import render, get_object_or_404
 
-
 from django.http import HttpResponseRedirect
 
 from .models import MainMenu, Book, Order, OrderItem
@@ -13,8 +12,11 @@ from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
 from django.shortcuts import render
-from .forms import ContactForm
-from django.core.mail import send_mail
+# from .forms import ContactForm
+# from django.core.mail import send_mail
+# from django.views.generic import View
+
+# from django.http import HttpResponse
 
 
 # Create your views here.
@@ -24,11 +26,11 @@ def index(request):
     # return HttpResponse("<h1 align='center'>Helloooo World</h1> <h2>This is a try</h2>")
     # return render(request, 'bookMng/displaybooks.html')
     return render(request,
-            'bookMng/home.html',
-            {
-              'item_list': MainMenu.objects.all()
-            }
-            )
+                  'bookMng/home.html',
+                  {
+                      'item_list': MainMenu.objects.all()
+                  }
+                  )
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -40,22 +42,20 @@ def cart(request):
     # it will get all the orderitems that have order as the parent 
     items = order.orderitem_set.all()
 
-
     for item in items:
         item.book.picture = str(item.book.picture)[6:]
 
-    return render(request, 'bookMng/cart.html', 
-    {
-        'item_list': MainMenu.objects.all(),
-        'items': items,
-        'order': order
-    }
-    )
+    return render(request, 'bookMng/cart.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'items': items,
+                      'order': order
+                  }
+                  )
+
 
 @login_required(login_url=reverse_lazy('login'))
 def addtocart(request):
-
-
     user = request.user
 
     bookid = request.GET.get('id', '')
@@ -72,18 +72,17 @@ def addtocart(request):
 
     tochange = -1
 
-
     for item in items:
         if item.book.id == int(bookid):
             tochange = item
 
     if tochange != -1:
-        
+
         if 'fromcart' in request.GET:
             print('im getting called fromcart')
             tochange.quantity += 1
             tochange.save()
-        
+
         if 'arrowup' in request.GET:
             tochange.quantity += 1
             tochange.save()
@@ -96,11 +95,10 @@ def addtocart(request):
                 for item in items:
                     if item.quantity == 0:
                         item.delete()
-                
+
             else:
                 tochange.save()
             return HttpResponseRedirect('/cart')
-
 
     return HttpResponseRedirect('/displaybooks')
 
@@ -118,18 +116,17 @@ def checkout(request):
         item.book.picture = str(item.book.picture)[6:]
 
     return render(request, 'bookMng/checkout.html',
-    {
-        'item_list': MainMenu.objects.all(),
-        'items': items,
-        'order': order
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'items': items,
+                      'order': order
 
-    }
-    )
+                  }
+                  )
 
 
 @login_required(login_url=reverse_lazy('login'))
 def placeorder(request):
-
     user = request.user;
 
     order, created = Order.objects.get_or_create(user=user, complete=False)
@@ -140,21 +137,18 @@ def placeorder(request):
         order.save()
     elif items.count() == 0:
         return HttpResponseRedirect('/displaybooks')
-    
 
-    return render(request, 'bookMng/order_placed.html', 
-    {
-        'item_list': MainMenu.objects.all(),
-    }
-    )
+    return render(request, 'bookMng/order_placed.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                  }
+                  )
 
 
 @login_required(login_url=reverse_lazy('login'))
 def purchasehistory(request):
-
     user = request.user
     orders = Order.objects.filter(complete=True, user=user)
-
 
     items = []
 
@@ -169,14 +163,13 @@ def purchasehistory(request):
     print(items)
 
     return render(request, 'bookMng/purchase_history.html',
-    {
-        'item_list': MainMenu.objects.all(),
-        'items': items,
-        'order': orders,
-        'ordercount': orders.count()
-    }
-    )
-
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'items': items,
+                      'order': orders,
+                      'ordercount': orders.count()
+                  }
+                  )
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -186,25 +179,25 @@ def displaybooks(request):
         # b.pic_path = b.picture.url[14:]
         b.picture = str(b.picture)[6:]
     return render(request,
-            'bookMng/displaybooks.html',
-            {
-                'item_list': MainMenu.objects.all(),
-                'books': books
-            })
+                  'bookMng/displaybooks.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'books': books
+                  })
 
 
 @login_required(login_url=reverse_lazy('login'))
 def mybooks(request):
-    books = Book.objects.filter(username = request.user)
+    books = Book.objects.filter(username=request.user)
     for b in books:
         # b.pic_path = b.picture.url[14:]
         b.picture = str(b.picture)[6:]
     return render(request,
-            'bookMng/mybooks.html',
-            {
-                'item_list': MainMenu.objects.all(),
-                'books': books
-            })
+                  'bookMng/mybooks.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'books': books
+                  })
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -217,11 +210,11 @@ def book_takedown(request, book_id):
         book.taken_down = False
     book.save()
     return render(request,
-            'bookMng/book_takedown.html',
-            {
-                'item_list': MainMenu.objects.all(),
-                'taken_down': book.taken_down
-            })
+                  'bookMng/book_takedown.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'taken_down': book.taken_down
+                  })
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -243,15 +236,13 @@ def postbook(request):
         if 'submitted' in request.GET:
             submitted = True
     return render(request,
-            'bookMng/postbook.html',
-            {
-              'form': form,
-              'item_list': MainMenu.objects.all(),
-              'submitted': submitted
-            }
-            )
-
-
+                  'bookMng/postbook.html',
+                  {
+                      'form': form,
+                      'item_list': MainMenu.objects.all(),
+                      'submitted': submitted
+                  }
+                  )
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -260,14 +251,14 @@ def book_detail(request, book_id):
     picture = str(book.picture)[6:]
     reviews = book.review_set.all()
     return render(request,
-            'bookMng/book_detail.html',
-            {
-                'item_list': MainMenu.objects.all(),
-                'book': book,
-                'picture': picture,
-                'reviews': reviews
-            }
-            )
+                  'bookMng/book_detail.html',
+                  {
+                      'item_list': MainMenu.objects.all(),
+                      'book': book,
+                      'picture': picture,
+                      'reviews': reviews
+                  }
+                  )
 
 
 @login_required(login_url=reverse_lazy('login'))
@@ -288,67 +279,37 @@ def postreview(request, book_id):
         form = ReviewForm()
         if 'submitted' in request.GET:
             submitted = True
-    
-    return render(request, 'bookMng/postreview.html',
-            {
-                'book': book,
-                'form': form,
-                'item_list': MainMenu.objects.all(),
-                'submitted': submitted,
-                'reviews': reviews,
-            })
 
+    return render(request, 'bookMng/postreview.html',
+                  {
+                      'book': book,
+                      'form': form,
+                      'item_list': MainMenu.objects.all(),
+                      'submitted': submitted,
+                      'reviews': reviews,
+                  })
 
 
 def searchbar(request):
-     if request.method == 'GET':
-         search = request.GET.get('search')
-         try:
+    if request.method == 'GET':
+        search = request.GET.get('search')
+        try:
             book = Book.objects.get(name=search)
-         except:
+        except:
             return HttpResponseRedirect('/displaybooks')
-         
-         
-         if book.taken_down == True:
-             return HttpResponseRedirect('/displaybooks')
-         picture = str(book.picture)[6:]
-         reviews = book.review_set.all()
-         return render(request,
-                       'bookMng/book_detail.html',
-                       {
-                           'item_list': MainMenu.objects.all(),
-                           'book': book,
-                           'picture': picture,
-                           'reviews': reviews
-                       })
 
-
-def contactview(request):
-    name = ''
-    email = ''
-    comment = ''
-
-    form = ContactForm(request.POST or None)
-    if form.is_valid():
-        name = form.cleaned_data.get("name")
-        email = form.cleaned_data.get("email")
-        comment = form.cleaned_data.get("comment")
-
-        if request.user.is_authenticated():
-            subject = str(request.user) + "'s Comment"
-        else:
-            subject = "A Visitor's Comment"
-
-        comment = name + " with the email, " + email + ", sent the following message:\n\n" + comment;
-        send_mail(subject, comment, 'bookexproject@gmail.com', [email])
-
-        context = {'form': form}
-
-        return render(request, 'contact/contact.html', context)
-
-    else:
-        context = {'form': form}
-        return render(request, 'contact/contact.html', context)
+        if book.taken_down == True:
+            return HttpResponseRedirect('/displaybooks')
+        picture = str(book.picture)[6:]
+        reviews = book.review_set.all()
+        return render(request,
+                      'bookMng/book_detail.html',
+                      {
+                          'item_list': MainMenu.objects.all(),
+                          'book': book,
+                          'picture': picture,
+                          'reviews': reviews
+                      })
 
 
 class Register(CreateView):
@@ -359,3 +320,10 @@ class Register(CreateView):
     def form_valid(self, form):
         form.save()
         return HttpResponseRedirect(self.success_url)
+
+
+def contact(request):
+    return render(request, 'contact.html', {})
+
+
+
