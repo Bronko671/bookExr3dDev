@@ -1,9 +1,6 @@
 from django.urls import path
 from . import views
 
-# from django.conf.urls import url
-# from django.contrib import admin
-# from .views import (contactview)
 
 
 urlpatterns = [
@@ -21,5 +18,4 @@ urlpatterns = [
     path('placeorder', views.placeorder, name='placeorder'),
     path('purchasehistory', views.purchasehistory, name='purchasehistory'),
     path('contact/', views.contact, name='contact'),
-
 ]

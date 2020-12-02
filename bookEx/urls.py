@@ -21,11 +21,6 @@ from django.urls import include
 from django.views.generic.base import TemplateView
 from bookMng.views import Register
 
-from django.conf.urls import url, include
-from django.contrib import admin
-from django.conf.urls.static import static
-from django.conf import settings
-
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -34,6 +29,7 @@ urlpatterns = [
     path('register', Register.as_view(), name='register'),
     path('', include('django.contrib.auth.urls')),
     path('', include('bookMng.urls')),
+
 
 
 ]

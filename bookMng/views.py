@@ -1,9 +1,6 @@
 from django.shortcuts import render, get_object_or_404
-
-from django.http import HttpResponseRedirect
-
+from django.http import HttpResponseRedirect, request
 from .models import MainMenu, Book, Order, OrderItem
-
 from .forms import BookForm, ReviewForm
 
 from django.views.generic.edit import CreateView
@@ -11,15 +8,39 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth.decorators import login_required
 
-from django.shortcuts import render
-# from .forms import ContactForm
-# from django.core.mail import send_mail
-# from django.views.generic import View
-
-# from django.http import HttpResponse
-
+from django.conf import settings
+from django.core.mail import send_mail
 
 # Create your views here.
+
+
+def contact(request):
+    if request.method == 'POST':
+        firstname = request.POST['firstname']
+        lastname = request.POST['lastname']
+        # subject = request.POST['subject']
+        fromemail = request.POST['fromemail']
+        message = request.POST['message']
+        send_mail('message from ' + firstname + ' ' + lastname,
+                  message,
+                  fromemail,
+                  [settings.EMAIL_HOST_USER],
+                  fail_silently=False)
+        return render(request, 'bookMng/contact.html', {'firstname': firstname})
+
+    else:
+        return render(request, 'bookMng/contact.html', {})
+
+
+    # if request.method == "POST":
+    #     firstname = request.POST['firstname']
+    #     lastname = request.POST['lastname']
+    #     subject = request.POST['subject']
+    #
+    #     return render(request, 'bookMng/contact.html', {'firstname': firstname})
+    #
+    # else:
+
 
 @login_required(login_url=reverse_lazy('login'))
 def index(request):
@@ -320,10 +341,3 @@ class Register(CreateView):
     def form_valid(self, form):
         form.save()
         return HttpResponseRedirect(self.success_url)
-
-
-def contact(request):
-    return render(request, 'contact.html', {})
-
-
-
